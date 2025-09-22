@@ -116,7 +116,7 @@ int32_t ConfigFileGetInt(HConfigFile config, const char* key, int32_t default_va
  *     float gravity = ConfigFileGetFloat(params->m_ConfigFile, "physics.gravity_y", -9.8f);
  * }
  * ```
-* @examples
+ * @examples
  *
  * ```cpp
  * static dmExtension::Result AppInitialize(dmExtension::AppParams* params)
@@ -127,6 +127,35 @@ int32_t ConfigFileGetInt(HConfigFile config, const char* key, int32_t default_va
  *
  */
 float ConfigFileGetFloat(HConfigFile config, const char* key, float default_value);
+
+/*# get config value as boolean
+ *
+ * Get config value as boolean, returns default if the key isn't found
+ *
+ * @name ConfigFileGetBoolean
+ * @param config [type:HConfigFile] Config file handle
+ * @param key [type:const char*] Key in format section.key (.key for no section)
+ * @param default_value [type:bool] Default value to return if key isn't found
+ * @return value [type:bool] found value or default value
+ *
+ * @examples
+ * ```c
+ * static ExtensionResult AppInitialize(ExtensionAppParams* params)
+ * {
+ *     bool vsync = ConfigFileGetBoolean(params->m_ConfigFile, "display.vsync", false);
+ * }
+ * ```
+ * @examples
+ *
+ * ```cpp
+ * static dmExtension::Result AppInitialize(dmExtension::AppParams* params)
+ * {
+ *     bool vsync = dmConfigFile::GetBoolean(params->m_ConfigFile, "display.vsync", false);
+ * }
+ * ```
+ *
+ */
+bool ConfigFileGetBoolean(HConfigFile config, const char* key, bool default_value);
 
 // Extensions
 
@@ -176,6 +205,17 @@ typedef bool (*FConfigFileGetInt)(HConfigFile config, const char* key, int32_t d
  * @return result [type:bool] True if property was found
  */
 typedef bool (*FConfigFileGetFloat)(HConfigFile config, const char* key, float default_value, float* out);
+
+/*# Called when a boolean is requested from the config file extension
+ * @typedef
+ * @name FConfigFileGetBoolean
+ * @param config [type:HConfigFile] Config file handle
+ * @param key [type:const char*] Key in format section.key (.key for no section)
+ * @param default_value [type:bool] Default value to return if key isn't found
+ * @param out [type:bool*] Out argument where result is stored if found.
+ * @return result [type:bool] True if property was found
+ */
+typedef bool (*FConfigFileGetBoolean)(HConfigFile config, const char* key, bool default_value, bool* out);
 
 /*# Used when registering new config file extensions.
  * It defines the minimum size of the description blob being registered.

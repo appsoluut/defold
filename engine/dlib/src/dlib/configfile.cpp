@@ -54,6 +54,7 @@ struct ConfigFilePluginDesc
     FConfigFileGetString m_GetString;
     FConfigFileGetInt m_GetInt;
     FConfigFileGetFloat m_GetFloat;
+    FConfigFileGetBoolean m_GetBoolean;
 
     const ConfigFilePluginDesc* m_Next;
 };
@@ -72,7 +73,8 @@ void ConfigFileRegisterExtension(void* _desc,
     FConfigFileDestroy destroy,
     FConfigFileGetString get_string,
     FConfigFileGetInt get_int,
-    FConfigFileGetFloat get_float)
+    FConfigFileGetFloat get_float,
+    FConfigFileGetBoolean get_boolean)
 {
     struct ConfigFilePluginDesc* desc = (struct ConfigFilePluginDesc*)_desc;
     DM_STATIC_ASSERT(ConfigFileExtensionDescBufferSize >= sizeof(struct ConfigFilePluginDesc), Invalid_Struct_Size);
@@ -82,6 +84,7 @@ void ConfigFileRegisterExtension(void* _desc,
     desc->m_GetString = get_string;
     desc->m_GetInt = get_int;
     desc->m_GetFloat = get_float;
+    desc->m_GetBoolean = get_boolean;
 
     desc->m_Next = g_FirstExtension;
     g_FirstExtension = desc;
@@ -171,6 +174,31 @@ static bool GetFloatOverride(HConfigFile config, const char* key, float default_
     return false;
 }
 
+static float GetBaseBoolean(HConfigFile config, const char* key, bool default_value)
+{
+    const char* tmp = GetBaseString(config, key, 0);
+    if (tmp == 0)
+        return default_value;
+    if (strcmp(tmp, "true") == 0 || strcmp(tmp, "1") == 0)
+        return true;
+    if (strcmp(tmp, "false") == 0 || strcmp(tmp, "0") == 0 || strcmp(tmp, "no") == 0)
+        return false;
+    dmLogWarning("Unable to convert '%s' to boolean", tmp);
+    return default_value;
+}
+
+static bool GetBooleanOverride(HConfigFile config, const char* key, bool default_value, bool* out_value)
+{
+    const ConfigFilePluginDesc* plugin = GetFirstExtension();
+    while (plugin != 0)
+    {
+        if (plugin->m_GetBoolean && plugin->m_GetBoolean(config, key, default_value, out_value))
+            return true;
+        plugin = plugin->m_Next;
+    }
+    return false;
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // C api
 
@@ -197,6 +225,15 @@ float ConfigFileGetFloat(HConfigFile config, const char* key, float default_valu
     float base_value = GetBaseFloat(config, key, default_value);
     float out_value = 0;
     if (GetFloatOverride(config, key, base_value, &out_value))
+        return out_value;
+    return base_value;
+}
+
+bool ConfigFileGetBoolean(HConfigFile config, const char* key, bool default_value)
+{
+    bool base_value = GetBaseBoolean(config, key, default_value);
+    bool out_value = false;
+    if (GetBooleanOverride(config, key, base_value, &out_value))
         return out_value;
     return base_value;
 }
@@ -803,5 +840,10 @@ namespace dmConfigFile
     float GetFloat(HConfig config, const char* key, float default_value)
     {
         return ConfigFileGetFloat(config, key, default_value);
+    }
+
+    bool GetBoolean(HConfig config, const char* key, bool default_value)
+    {
+        return ConfigFileGetBoolean(config, key, default_value);
     }
 }

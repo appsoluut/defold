@@ -411,12 +411,15 @@ TEST_P(ConfigfileExtension, ConfigfileExtension)
     ASSERT_STREQ("world", dmConfigFile::GetString(config, "ext.string", 0));
     ASSERT_STREQ("42", dmConfigFile::GetString(config, "ext.int", 0));
     ASSERT_STREQ("1.0", dmConfigFile::GetString(config, "ext.float", 0));
+    ASSERT_STREQ("false", dmConfigFile::GetString(config, "ext.boolean", 0));
 
     ASSERT_EQ(84, dmConfigFile::GetInt(config, "ext.int", 0));
     ASSERT_EQ(2.0f, dmConfigFile::GetFloat(config, "ext.float", 0));
+    ASSERT_EQ(true, dmConfigFile::GetBoolean(config, "ext.boolean", false));
 
     ASSERT_EQ(1301, dmConfigFile::GetInt(config, "ext.virtual", 0));
     ASSERT_EQ(4096.0f, dmConfigFile::GetFloat(config, "ext.virtual", 0));
+    ASSERT_EQ(true, dmConfigFile::GetBoolean(config, "ext.virtual", false));
 }
 
 const TestParam params_extension[] = {

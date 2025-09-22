@@ -16,13 +16,15 @@
 					"FConfigFileDestroy",
 					"FConfigFileGetString",
 					"FConfigFileGetInt",
-					"FConfigFileGetFloat"
+					"FConfigFileGetFloat",
+					"FConfigFileGetBoolean"
 				],
 				"rename": {
 					"HConfigFile": "HConfig",
 					"ConfigFileGetString": "GetString",
 					"ConfigFileGetInt": "GetInt",
-					"ConfigFileGetFloat": "GetFloat"
+					"ConfigFileGetFloat": "GetFloat",
+					"ConfigFileGetBoolean": "GetBoolean"
 				}
 			},
 			"csharp": {
@@ -35,13 +37,15 @@
 					"FConfigFileDestroy",
 					"FConfigFileGetString",
 					"FConfigFileGetInt",
-					"FConfigFileGetFloat"
+					"FConfigFileGetFloat",
+					"FConfigFileGetBoolean"
 				],
 				"rename": {
 					"HConfigFile": "Config*",
 					"ConfigFileGetString": "GetString",
 					"ConfigFileGetInt": "GetInt",
 					"ConfigFileGetFloat": "GetFloat",
+					"ConfigFileGetBoolean": "GetBoolean",
 					"ConfigFile": "Config"
 				}
 			}

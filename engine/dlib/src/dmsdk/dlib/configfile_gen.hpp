@@ -1,5 +1,5 @@
 // Generated, do not edit!
-// Generated with cwd=/Users/bjornritzl/projects/defold/engine/dlib and cmd=/Users/bjornritzl/projects/defold/scripts/dmsdk/gen_sdk.py -i /Users/bjornritzl/projects/defold/engine/dlib/sdk_gen.json
+// Generated with cwd=/home/paul/Documents/Projects/defold/engine/dlib and cmd=/home/paul/Documents/Projects/defold/scripts/dmsdk/gen_sdk.py -i /home/paul/Documents/Projects/defold/engine/dlib/sdk_gen.json
 
 // Copyright 2020-2025 The Defold Foundation
 // Copyright 2014-2020 King
@@ -32,6 +32,7 @@
  * @language C++
  * @name ConfigFile
  * @namespace dmConfigFile
+ * @path engine/dlib/src/dmsdk/dlib/configfile_gen.hpp
  */
 
 #include <stdint.h>
@@ -124,6 +125,31 @@ namespace dmConfigFile
      */
     float GetFloat(HConfig config, const char * key, float default_value);
 
+    /*# get config value as boolean
+     * Get config value as boolean, returns default if the key isn't found
+     * @name GetBoolean
+     * @language C++
+     * @param config [type:HConfigFile] Config file handle
+     * @param key [type:const char*] Key in format section.key (.key for no section)
+     * @param default_value [type:bool] Default value to return if key isn't found
+     * @return value [type:bool] found value or default value
+     * @examples 
+     * ```c
+     * static ExtensionResult AppInitialize(ExtensionAppParams* params)
+     * {
+     *     bool vsync = ConfigFileGetBoolean(params->m_ConfigFile, "display.vsync", false);
+     * }
+     * ```
+     * @examples 
+     * ```cpp
+     * static dmExtension::Result AppInitialize(dmExtension::AppParams* params)
+     * {
+     *     bool vsync = dmConfigFile::GetBoolean(params->m_ConfigFile, "display.vsync", false);
+     * }
+     * ```
+     */
+    bool GetBoolean(HConfig config, const char * key, bool default_value);
+
 
 } // namespace dmConfigFile
 
@@ -208,6 +234,30 @@ namespace dmConfigFile
  * ```
  */
 
+/*# get config value as boolean
+ * Get config value as boolean, returns default if the key isn't found
+ * @name ConfigFileGetBoolean
+ * @language C
+ * @param config [type:HConfigFile] Config file handle
+ * @param key [type:const char*] Key in format section.key (.key for no section)
+ * @param default_value [type:bool] Default value to return if key isn't found
+ * @return value [type:bool] found value or default value
+ * @examples 
+ * ```c
+ * static ExtensionResult AppInitialize(ExtensionAppParams* params)
+ * {
+ *     bool vsync = ConfigFileGetBoolean(params->m_ConfigFile, "display.vsync", false);
+ * }
+ * ```
+ * @examples 
+ * ```cpp
+ * static dmExtension::Result AppInitialize(dmExtension::AppParams* params)
+ * {
+ *     bool vsync = dmConfigFile::GetBoolean(params->m_ConfigFile, "display.vsync", false);
+ * }
+ * ```
+ */
+
 /*# Called when config file extension is created
  * Called when config file extension is created
  * @typedef
@@ -260,8 +310,21 @@ namespace dmConfigFile
  * @return result [type:bool] True if property was found
  */
 
+/*# Called when a boolean is requested from the config file extension
+ * Called when a boolean is requested from the config file extension
+ * @typedef
+ * @name FConfigFileGetBoolean
+ * @language C
+ * @param config [type:HConfigFile] Config file handle
+ * @param key [type:const char*] Key in format section.key (.key for no section)
+ * @param default_value [type:bool] Default value to return if key isn't found
+ * @param out [type:bool*] Out argument where result is stored if found.
+ * @return result [type:bool] True if property was found
+ */
+
 /*# Used when registering new config file extensions.
  * It defines the minimum size of the description blob being registered.
+ * @constant
  * @name ConfigFileExtensionDescBufferSize
  * @language C
  */
